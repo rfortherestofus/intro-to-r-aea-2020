@@ -1,6 +1,6 @@
 ---
 title: "Introduction to R Workshop"
-author: "R for the Rest of Us"
+author: "David Keyes // R for the Rest of Us"
 output:
   xaringan::moon_reader:
     df_print: paged
@@ -36,46 +36,54 @@ class: center, middle, inverse, dk-section-title
 
 # Introductions
 
-1. Name 
+I'll add a map here of people's locations and organizations
 
---
+---
 
-1. Organization
+# Introductions
 
---
-
-1. Why you want to learn R
-
---
-
-1. Share a **boring** fact about yourself
+I'll add a table here that highlights why people want to learn R
 
 
 ---
 
 # Agenda
 
-1. Logistics
+.pull-left[
+
+**Week 1**
+
+Logistics
+
+Review Getting Started with R
+
+RMarkdown
+
+
+**Week 2**
+
+Data Wrangling and Analysis Part 1
+
+]
+
 
 --
 
-1. Getting Started with R
+.pull-right[
 
---
+**Week 3**
 
-1. RMarkdown
+Data Wrangling and Analysis Part 2
 
---
+Data Visualization Part 1
 
-1. Break
+**Week 4**
 
---
+Data Visualization Part 2
 
-1. Data Wrangling and Analysis
+Wrap Up
 
---
-
-1. Data Visualization
+]
 
 ---
 
@@ -83,33 +91,15 @@ class: center, middle, inverse, dk-section-title
 
 # Logistics
 
-
 ---
 
-## Sticky Notes
+## Ask For Help in the Google Doc
 
-.pull-left[
-<div class="sticky-good">
-I'm good
-</div>
-]
-
-
-.pull-right[
-<div class="sticky-stuck">
-I'm stuck
-</div>
-]
-
----
-
-## Stuck? Talk With a Neighbor
+https://rfortherestofus.com/aea-estudy-notes/
 
 --
 
-.center[
-![](images/talk-with-neighbor.png)
-]
+If you're having trouble, others likely are too!
 
 ---
 
@@ -137,6 +127,29 @@ background-image: url("images/hadley-wickham.jpg")
 
 ???
 Source: (https://r-posts.com/advice-to-young-and-old-programmers-a-conversation-with-hadley-wickham/) 
+
+---
+
+class: center, middle, dk-section-title
+
+background-image: url("images/confused.jpg")
+
+# Confusions from Getting Started
+
+
+---
+
+## Confusions from Getting Started
+
+I'll add some common confusions here
+
+
+---
+
+# RStudio Cloud
+
+![](images/rstudio-cloud.png)
+
 
 ---
 
@@ -179,13 +192,6 @@ Download RStudio at the [RStudio website](https://www.rstudio.com/products/rstud
 
 ---
 
-
-## RStudio Cloud
-
-![](images/rstudio-cloud.png)
-
----
-
 ### Tour of RStudio
 
 .center[
@@ -194,22 +200,6 @@ Download RStudio at the [RStudio website](https://www.rstudio.com/products/rstud
 
 ---
 
-
-class: inverse
-
-### Download Course Project
-
-This is only if, for some reason, someone can't get RStudio Cloud working.
-
---
-
-Enter the following into the console pane:
-
-```{r eval = F}
-install.packages("usethis")
-library(usethis)
-use_course("https://rfortherestofus.com/workshop-materials/")
-```
 
 
 

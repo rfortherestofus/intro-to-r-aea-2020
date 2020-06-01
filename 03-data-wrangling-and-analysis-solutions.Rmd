@@ -247,6 +247,49 @@ nhanes %>%
 ```
 
 
+
+# arrange
+
+![](slides/images/arrange.png)
+
+With `arrange`, we can reorder rows in a data frame based on the values of one or more variables. R arranges in ascending order by default.
+
+Use `count` to show the number of responses by education level. Then, use `arrange` to order by the number of responses.
+
+```{r}
+nhanes %>% 
+  count(education) %>% 
+  arrange(n)
+```
+
+We can also arrange in descending order using `desc`.
+
+Do the same thing as above, but put it in descending order using `desc`.
+
+```{r}
+nhanes %>% 
+  count(education) %>% 
+  arrange(desc(n)) 
+```
+
+We often use `arrange` at the end of chains to display things in order.
+
+Create a chain that does the following:
+
+1. Uses `filter` to only include those age 30 or older
+2. Uses `group_by` to create a male and female group
+3. Uses `summarize` to calculate a new variable called `mean_bad_mental_health_days` for males and females
+4. Uses `arrange` to put `mean_bad_mental_health_days` in descending order
+
+```{r}
+nhanes %>% 
+  filter(age >= 30) %>% 
+  group_by(gender) %>% 
+  summarize(mean_bad_mental_health_days = mean(days_ment_hlth_bad, na.rm = TRUE)) %>% 
+  arrange(desc(mean_bad_mental_health_days))
+```
+
+
 # Create a new data frame
 
 Sometimes you want to save the results of your work to a new data frame. 

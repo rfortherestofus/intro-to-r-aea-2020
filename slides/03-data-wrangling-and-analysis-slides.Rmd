@@ -67,6 +67,8 @@ R package: https://cran.r-project.org/web/packages/NHANES/index.html
 
 class: inverse, center, middle, dk-section-title
 
+background-image: url("images/tidyverse-website.png")
+
 # The tidyverse
 
 ---

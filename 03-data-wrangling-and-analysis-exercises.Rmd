@@ -134,7 +134,7 @@ Use `%in%` within the `filter` function to keep only those who are divorced, sep
 # YOUR CODE HERE
 ```
 
-Create a chain that keeps only those are college grads (line #1). Then, `filter` to keep only those who are divorced, separated, or widowed. Finally, use `select` to show only the `education` and `marital_status` variables.
+Create a pipeline that keeps only those are college grads (line #1). Then, `filter` to keep only those who are divorced, separated, or widowed. Finally, use `select` to show only the `education` and `marital_status` variables.
 
 ```{r}
 # YOUR CODE HERE
@@ -199,11 +199,45 @@ Use `group_by` for `gender` and `work` (whether or not respondents are working) 
 ```
 
 
+# arrange
+
+![](slides/images/arrange.png)
+
+With `arrange`, we can reorder rows in a data frame based on the values of one or more variables. R arranges in ascending order by default.
+
+Use `count` to show the number of responses by education level. Then, use `arrange` to order by the number of responses.
+
+```{r}
+# YOUR CODE HERE
+```
+
+We can also arrange in descending order using `desc`.
+
+Do the same thing as above, but put it in descending order using `desc`.
+
+```{r}
+# YOUR CODE HERE
+```
+
+We often use `arrange` at the end of pipelines to display things in order.
+
+Create a pipeline that does the following:
+
+1. Uses `filter` to only include those age 30 or older
+2. Uses `group_by` to create a male and female group
+3. Uses `summarize` to calculate a new variable called `mean_bad_mental_health_days` for males and females
+4. Uses `arrange` to put `mean_bad_mental_health_days` in descending order
+
+```{r}
+# YOUR CODE HERE
+```
+
+
 # Create a new data frame
 
 Sometimes you want to save the results of your work to a new data frame. 
 
-Create a chain that starts with your `nhanes` data frame, does the following, and saves the result to a new data frame called `mental_health_over_30`:
+Create a pipeline that starts with your `nhanes` data frame, does the following, and saves the result to a new data frame called `mental_health_over_30`:
 
 1. Uses `filter` to only include those age 30 or older
 2. Uses `group_by` to create a male and female group
@@ -213,98 +247,6 @@ Create a chain that starts with your `nhanes` data frame, does the following, an
 # YOUR CODE HERE
 ```
 
-# Crosstabs
-
-The `tabyl` function in the `janitor` package is mostly used for crosstabs, but you can use it to do frequencies.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade)
-```
-
-To do a crosstab, you just add another variable.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) 
-```
-
-
-`janitor` has a set of functions that all start with `adorn_` that add a number of things to our crosstabs. We call them after `tabyl`. For example, `adorn_totals`.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) %>% 
-  adorn_totals(where = c("row", "col"))
-```
-
-
-We can add `adorn_percentages` to add percentages.
-
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) %>% 
-  adorn_totals(where = c("row", "col")) %>% 
-  adorn_percentages()
-```
-
-
-
-We can then format these percentages using `adorn_pct_formatting`.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) %>% 
-  adorn_totals(where = c("row", "col")) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting(digits = 0,
-                       rounding = "half up") 
-```
-
-
-
-If we want to include the n alongside percentages, we can use `adorn_ns`.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) %>% 
-  adorn_totals(c("row", "col")) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting(digits = 0,
-                       rounding = "half up") %>% 
-  adorn_ns()
-```
-
-
-
-We can add titles to our crosstabs using `adorn_title`. 
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender) %>% 
-  adorn_totals(c("row", "col")) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting() %>% 
-  adorn_ns() %>% 
-  adorn_title(placement = "combined")
-```
-
-
-
-
-We can also do three (or more) way crosstabs automatically by adding more variables to the `tabyl` function.
-
-```{r}
-nhanes %>% 
-  tabyl(age_decade, gender, education) %>% 
-  adorn_totals(c("row", "col")) %>% 
-  adorn_percentages() %>% 
-  adorn_pct_formatting() %>% 
-  adorn_ns() %>% 
-  adorn_title(placement = "combined")
-
-```
 
 # Crosstabs
 
