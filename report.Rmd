@@ -1,0 +1,194 @@
+---
+title: "Introduction to R Participants"
+output: 
+    html_document:
+        css: slides/style.css
+        toc: true
+        toc_depth: 2
+        toc_float: true
+        df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      include = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+```{r}
+# Load packages
+
+library(tidyverse)
+library(googlesheets4)
+library(janitor)
+library(lubridate)
+library(tigris)
+library(hrbrthemes)
+library(gendercodeR)
+library(ggmap)
+library(leaflet)
+library(scales)
+```
+
+```{r}
+# Set plotting default theme
+
+theme_set(theme_ipsum(base_family = "Karla",
+                      axis_title_family = "Karla",
+                      axis_title_just = "m",
+                      grid = "Yy"))
+```
+
+
+
+```{r}
+# Import our data
+
+survey_responses <- read_sheet("https://docs.google.com/spreadsheets/d/1w0cjfzCsBVMSDCycyAEtvyVUncSfG82odGH6l5VEawY/edit#gid=526375458") %>% 
+  # Make the variable names easy to work with
+  clean_names() 
+```
+
+# About our Respondents
+
+```{r}
+number_of_responses <- nrow(survey_responses)
+```
+
+We received responses from `r number_of_responses` people. 
+
+## Locations
+
+The map below shows the locations of respondents. 
+
+```{r fig.height=6}
+respondent_locations <- survey_responses %>% 
+  drop_na(where_will_you_be_joining_the_e_study_from) %>% 
+  mutate_geocode(where_will_you_be_joining_the_e_study_from) %>% 
+  select(where_will_you_be_joining_the_e_study_from, lon, lat)
+
+leaflet(respondent_locations) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addCircleMarkers(~lon, ~lat,
+                   color = "#FF7400",
+                   stroke = FALSE, 
+                   fillOpacity = 0.7,
+                   popup = ~where_will_you_be_joining_the_e_study_from,
+                   clusterOptions = markerClusterOptions(showCoverageOnHover = FALSE))
+```
+
+
+
+# R Expertise
+
+```{r}
+mean_expertise <- survey_responses %>% 
+  summarize(mean_expertise = mean(how_would_you_rate_your_level_of_expertise_working_with_r, na.rm = TRUE)) %>% 
+  mutate(mean_expertise = round_half_up(mean_expertise, 1)) %>% 
+  pull(mean_expertise)
+```
+
+On a 10-point scale, respondents listed their level of expertise with R as `r number(mean_expertise, .1)`. The figure below shows the distribution of responses.
+
+```{r fig.height = 4}
+survey_responses %>% 
+  drop_na(how_would_you_rate_your_level_of_expertise_working_with_r) %>% 
+  count(how_would_you_rate_your_level_of_expertise_working_with_r) %>% 
+  ggplot(aes(how_would_you_rate_your_level_of_expertise_working_with_r, n)) +
+  geom_col(fill = "#6CABDD")+
+  geom_text(aes(label = n),
+            vjust = -1.5,
+            color = "#6CABDD") +
+  coord_cartesian(clip = "off") +
+  scale_x_continuous(limits = c(0, 10),
+                     breaks = seq(0, 10, by = 1),
+                     labels = c("0\nNovice",
+                                "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                                "10\nExpert")) +
+  scale_y_continuous(labels = number_format(accuracy = 1)) +
+  labs(title = str_wrap("How would you rate your level of expertise working with R?", 40),
+       x = "Self-rated level of expertise",
+       y = "Number of responses") +
+  theme(panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        plot.title = element_text(hjust = 0.5,
+                                  margin = margin(b = 20, unit = "pt"))) 
+```
+
+
+# Excitement/Nervousness
+
+```{r}
+mean_excitement <- survey_responses %>% 
+  summarize(mean_excitement = mean(on_a_scale_from_terrified_to_excited_how_do_you_feel_about_the_process_of_learning_r, na.rm = TRUE)) %>% 
+  mutate(mean_excitement = round_half_up(mean_excitement, 1)) %>% 
+  pull(mean_excitement)
+```
+
+On a 10-point scale, respondents listed their level of excitement about learning R as `r number(mean_excitement, .1)`. The figure below shows the distribution of responses.
+
+```{r fig.height = 4}
+survey_responses %>% 
+  drop_na(on_a_scale_from_terrified_to_excited_how_do_you_feel_about_the_process_of_learning_r) %>% 
+  count(on_a_scale_from_terrified_to_excited_how_do_you_feel_about_the_process_of_learning_r) %>% 
+  ggplot(aes(on_a_scale_from_terrified_to_excited_how_do_you_feel_about_the_process_of_learning_r, n)) +
+  geom_col(fill = "#6CABDD")+
+  geom_text(aes(label = n),
+            vjust = -1.5,
+            color = "#6CABDD") +
+  coord_cartesian(clip = "off") +
+  scale_x_continuous(limits = c(0, 10),
+                     breaks = seq(0, 10, by = 1),
+                     labels = c("0\nTerrified",
+                                "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                                "10\nExcited")) +
+  scale_y_continuous(labels = number_format(accuracy = 1)) +
+  labs(title = "How excited are you to learn R?",
+       x = "Excitement level",
+       y = "Number of responses") +
+  theme(panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        plot.title = element_text(hjust = 0.5,
+                                  margin = margin(b = 20, unit = "pt"))) 
+```
+
+# Tools People Currently Use
+
+
+```{r}
+other_tools <- survey_responses %>% 
+  select(contains("what_software")) %>% 
+  pivot_longer(cols = everything(),
+               names_to = "type_of_work",
+               values_to = "tool") %>% 
+  mutate(type_of_work = case_when(
+    str_detect(type_of_work, "analysis") ~ "Data Analysis",
+    str_detect(type_of_work, "visualization") ~ "Data Visulization"
+  )) %>% 
+  separate_rows(tool, sep = ", ") %>% 
+  mutate(tool = fct_other(tool,
+                          keep = c("Excel", "R", "SAS", "SPSS", "Stata", "Tableau", "Powerpoint"),
+                          other_level = "Other")) %>% 
+  count(type_of_work, tool)
+```
+
+```{r fig.height = 8}
+ggplot(data = other_tools,
+       aes(x = tool,
+           y = n,
+           label = n)) +
+  geom_col(fill = "#6CABDD") +
+  geom_text(aes(label = n),
+            vjust = -1.5,
+            color = "#6CABDD") +
+  coord_cartesian(clip = "off") +
+  facet_wrap(~type_of_work,
+             ncol = 1,
+             scale = "free_x") +
+  labs(x = NULL,
+       y = NULL) +
+  theme(strip.text.x = element_text(face = "bold",
+                                    margin = margin(b = 20, unit = "pt")))
+```
+

@@ -34,19 +34,6 @@ class: center, middle, inverse, dk-section-title
 
 ---
 
-# Introductions
-
-I'll add a map here of people's locations and organizations
-
----
-
-# Introductions
-
-I'll add a table here that highlights why people want to learn R
-
-
----
-
 # Agenda
 
 .pull-left[
@@ -93,13 +80,33 @@ class: center, middle, inverse, dk-section-title
 
 ---
 
+## Video Recordings
+
+--
+
+The coupon code AEA2020FUNDAMENTALS will enable you to sign up for Fundamentals of R for $25
+
+
+---
+
 ## Ask For Help in the Google Doc
 
 https://rfortherestofus.com/aea-estudy-notes/
 
 --
 
+If you see a question or issue you're having too, add a +
+
+--
+
 If you're having trouble, others likely are too!
+
+---
+
+## Tell Me You're Done Via Private Chat
+
+Once I see a critical mass done with each exercises, we'll move on
+
 
 ---
 
@@ -136,13 +143,15 @@ background-image: url("images/confused.jpg")
 
 # Confusions from Getting Started
 
+???
+
+Rtools
 
 ---
 
-## Confusions from Getting Started
+# RStudio Cloud
 
-I'll add some common confusions here
-
+https://rstudio.cloud/project/1340380
 
 ---
 

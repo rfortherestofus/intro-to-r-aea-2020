@@ -34,6 +34,9 @@ Every RMarkdown document has the following:
 
 3. **Code chunks** (repeated as many times as necessary)
 
+???
+
+https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf
 
 
 ---
@@ -416,3 +419,14 @@ class: inverse
 ![](images/my-setup-code-chunk.png)
 
 
+---
+
+## Follow ups
+
+I'll send an email with additional resources for you to read about RMarkdown
+
+---
+
+## Homework
+
+Recreate the introduction of a report you've written in the past using RMarkdown

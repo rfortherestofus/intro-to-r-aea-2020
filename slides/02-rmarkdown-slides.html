@@ -50,6 +50,9 @@ Every RMarkdown document has the following:
 
 3. **Code chunks** (repeated as many times as necessary)
 
+???
+
+https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf
 
 
 ---
@@ -431,6 +434,19 @@ class: inverse
 99% of the time, this is what it looks like:
 
 ![](images/my-setup-code-chunk.png)
+
+
+---
+
+## Follow ups
+
+I'll send an email with additional resources for you to read about RMarkdown
+
+---
+
+## Homework
+
+Recreate the introduction of a report you've written in the past using RMarkdown
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -478,7 +494,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {
