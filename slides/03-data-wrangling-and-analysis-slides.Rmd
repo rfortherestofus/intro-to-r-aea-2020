@@ -51,9 +51,22 @@ class: center, middle, inverse, dk-section-title
 
 What questions do you have?
 
+???
+
+skimr often knits weird
+
 ---
 
-## Parameterized Reporting
+### Why won't my RMarkdown document knit?
+
+---
+
+### Reference Documents
+
+---
+
+### Parameterized Reporting
+
 
 --
 
@@ -74,6 +87,8 @@ Check out [this article from the Urban Institute](https://medium.com/@urban_inst
 [Examples](https://github.com/rfortherestofus/intro-to-r-aea-2020/blob/master/03-data-wrangling-and-analysis-examples.Rmd)
 
 [Solutions](https://github.com/rfortherestofus/intro-to-r-aea-2020/blob/master/03-data-wrangling-and-analysis-solutions.Rmd)
+
+[Cheatsheets](https://rfortherestofus.com/wp-content/uploads/2019/12/r-cheatsheets.pdf)
 
 ---
 
