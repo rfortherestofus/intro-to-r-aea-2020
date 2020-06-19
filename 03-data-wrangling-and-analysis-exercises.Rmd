@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Load the `tidyverse` package. 
 
 ```{r}
-# YOUR CODE HERE
+library(tidyverse)
 ```
 
 # Import NHANES Data
@@ -97,6 +97,14 @@ Create a new variable called `pct_days_phys_health_bad` and calculate it as the 
 
 ```{r}
 # YOUR CODE HERE
+# install.packages("scales")
+library(scales)
+
+nhanes %>% 
+    mutate(pct_days_phys_health_bad = days_phys_hlth_bad / 30) %>% 
+    select(pct_days_phys_health_bad, days_phys_hlth_bad) %>% 
+    mutate(pct_formatted = percent(pct_days_phys_health_bad,
+                                   accuracy = 1))
 ```
 
 Change an **existing variable**
@@ -124,7 +132,8 @@ Use `filter` to keep only respondents who are divorced. Then, use `select` to sh
 Use `filter` to keep only respondents who are **not** divorced. Then, use `select` to show only the `marital_status` variable.
 
 ```{r}
-# YOUR CODE HERE
+nhanes %>% 
+    filter(marital_status == "Divorced")
 ```
 
 
@@ -139,7 +148,6 @@ Create a pipeline that keeps only those are college grads (line #1). Then, `filt
 ```{r}
 # YOUR CODE HERE
 ```
-
 
 
 We can use `<`, `>`, `<=`, and `>=` for numeric data. 
@@ -194,6 +202,8 @@ We can use `group_by` with multiple groups.
 
 Use `group_by` for `gender` and `work` (whether or not respondents are working) before calculating mean hours of sleep.
 
+
+
 ```{r}
 # YOUR CODE HERE
 ```
@@ -230,6 +240,12 @@ Create a pipeline that does the following:
 
 ```{r}
 # YOUR CODE HERE
+nhanes %>% 
+    filter(age >= 30) %>% 
+    group_by(gender) %>% 
+    summarize(mean_bad_mental_health_days = mean(days_ment_hlth_bad,
+                                                 na.rm = TRUE)) %>% 
+    arrange(desc(mean_bad_mental_health_days))
 ```
 
 
@@ -244,7 +260,12 @@ Create a pipeline that starts with your `nhanes` data frame, does the following,
 3. Uses `summarize` to calculate a new variable called `mean_bad_mental_health_days` for males and females that calculates the mean number of days of bad mental health (the variable is `days_ment_hlth_bad`).
 
 ```{r}
-# YOUR CODE HERE
+mental_health_over_30 <- nhanes %>% 
+    filter(age >= 30) %>% 
+    group_by(gender) %>% 
+    summarize(mean_bad_mental_health_days = mean(days_ment_hlth_bad,
+                                                 na.rm = TRUE)) %>% 
+    arrange(desc(mean_bad_mental_health_days))
 ```
 
 

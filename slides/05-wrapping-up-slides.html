@@ -43,21 +43,26 @@ class: center, middle, inverse, dk-section-title
 
 ---
 
-## Check Your Email
-
-Over the next few days, I'll send you resources to help you continue to make progress.
-
----
-
 ## Twitter
 
 [![](images/rstats-twitter.gif)](https://twitter.com/search?q=%23rstats)
+
+
 
 ---
 
 ## R for Data Science Community
 
 [![](images/r4ds-website.png)](https://www.rfordatasci.com/)
+
+---
+
+## Tidy Tuesday
+
+--
+
+[![](images/hexagons_schooldiversity_hex.png)](https://twitter.com/search?q=tidytuesday)
+
 
 ---
 
@@ -111,7 +116,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {

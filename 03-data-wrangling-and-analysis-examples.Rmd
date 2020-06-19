@@ -22,6 +22,8 @@ Let's load the `tidyverse` package.
 
 ```{r}
 library(tidyverse)
+library(readxl)
+library(janitor)
 ```
 
 # Import NHANES Data
@@ -83,6 +85,24 @@ nhanes %>%
   select(-(id:age_decade))
 ```
 
+We can drop a set of variables using the -(var1:var2) format. Drop the variables from `health_gen` to the end.
+
+```{r}
+nhanes %>% 
+  select(health_gen:last_col())
+```
+
+```{r}
+nhanes %>% 
+  select(1:10)
+```
+
+```{r}
+nhanes %>% 
+  select(contains("phys"))
+```
+
+
 # mutate
 
 ![](slides/images/mutate.png)
@@ -98,6 +118,7 @@ Create a **new variable with a specific value**
 nhanes %>% 
   mutate(country = "United States") %>% 
   select(country)
+  
 ```
 
 
@@ -124,7 +145,6 @@ nhanes %>%
 ## Comparisons
 
 ```{r echo = FALSE}
-
 tibble::tribble(
   ~Operator, ~Description, ~Usage,
   "<", "less than", "x < y",
@@ -170,6 +190,10 @@ We can use `%in%` to only include responses that much a group.
 nhanes %>% 
   filter(health_gen %in% c("Good", "Vgood", "Excellent")) %>% 
   select(health_gen)
+
+nhanes %>% 
+  filter(health_gen == "Good" | health_gen == "Vgood" | health_gen == "Excellent") %>% 
+  select(health_gen)
 ```
 
 
@@ -189,6 +213,11 @@ We can use `<`, `>`, `<=`, and `=>` for numeric data.
 nhanes %>% 
   filter(age >= 50) %>% 
   select(age)
+```
+
+```{r}
+nhanes %>% 
+  filter(str_detect(education, "College"))
 ```
 
 
@@ -236,6 +265,12 @@ nhanes %>%
                                          na.rm = TRUE))
 ```
 
+```{r}
+nhanes %>% 
+  drop_na(phys_active_days) %>% 
+  summarize(mean_days_phys_active = mean(phys_active_days))
+```
+
 
 We can have multiple arguments in each usage of `summarize`. Let's add the median along with the mean.
 
@@ -247,8 +282,40 @@ nhanes %>%
                                              na.rm = TRUE),
             number_of_responses = n())
 ```
+```{r}
+nhanes %>% 
+  drop_na(phys_active_days) %>% 
+  summarize(mean_days_phys_active = mean(phys_active_days,
+                                         na.rm = TRUE),
+            median_days_phys_active = median(phys_active_days,
+                                             na.rm = TRUE),
+            number_of_responses = n())
+```
 
 
+```{r}
+nhanes %>% 
+   summarize(mean_hours_sleep = mean(sleep_hrs_night, na.rm =TRUE),
+minimum_hours_sleep = min(sleep_hrs_night, na.rm =TRUE))
+
+```
+
+
+```{r}
+nhanes %>%
+  summarize(mean_hours_sleep = mean(sleep_hrs_night, na.rm =TRUE),
+minimum_hours_sleep = min(sleep_hrs_night, na.rm =TRUE),
+ maximum_hours_sleep = max(sleep_hrs_night, na.rm =TRUE),
+  number_of_responses = n())
+
+```
+
+```{r}
+nhanes %>% 
+  drop_na(sleep_hrs_night) %>% 
+  summarize(mean_hours_sleep = mean(sleep_hrs_night),
+            max_hours_sleep = max(sleep_hrs_night))
+```
 
 
 # group_by
@@ -275,6 +342,20 @@ nhanes %>%
                                     na.rm = TRUE))
 ```
 
+```{r}
+nhanes %>% 
+  filter(age_decade == "0-9") %>% 
+  select(sleep_hrs_night)
+```
+
+
+```{r}
+nhanes %>%
+  drop_na(sleep_hrs_night) %>% 
+	group_by(gender, age_decade) %>%
+	summarize(mean_sleep_hrs_night = mean(sleep_hrs_night,na.rm=TRUE)) %>% 
+  mutate(mean_sleep_hrs_night_rounded = round(mean_sleep_hrs_night, digits = 1))
+```
 
 
 # arrange
@@ -306,6 +387,11 @@ nhanes %>%
   arrange(desc(mean_active_days))
 ```
 
+```{r}
+nhanes %>% 
+  count(gender, age_decade)
+```
+
 
 # Create new data frames
 
@@ -325,6 +411,11 @@ nhanes %>%
 ```
 
 This assigns that output to a new data frame.
+
+```{r}
+nhanes <- read_csv("data/nhanes.csv")
+```
+
 
 ```{r}
 female_height_by_age <- nhanes %>% 
@@ -369,7 +460,7 @@ We can add `adorn_percentages` to add percentages.
 nhanes %>% 
   tabyl(age_decade, gender) %>% 
   adorn_totals(where = c("row", "col")) %>% 
-  adorn_percentages()
+  adorn_percentages(denominator = "all")
 ```
 
 
@@ -420,11 +511,32 @@ We can also do three (or more) way crosstabs automatically by adding more variab
 
 ```{r}
 nhanes %>% 
+  mutate(education = factor(education,
+                            levels = c("8th Grade", 
+                                       "9 - 11th Grade",
+                                       "High School",
+                                       "Some College",
+                                       "College Grad"))) %>% 
   tabyl(age_decade, gender, education) %>% 
   adorn_totals(c("row", "col")) %>% 
   adorn_percentages() %>% 
   adorn_pct_formatting() %>% 
   adorn_ns() %>% 
   adorn_title(placement = "combined")
-
 ```
+
+# Tables
+
+```{r}
+library(gt)
+
+nhanes %>% 
+  group_by(gender, age_decade) %>%
+  filter(gender == "female") %>% 
+  summarize(mean_active_days = mean(phys_active_days,
+                                    na.rm = TRUE)) %>% 
+  drop_na(age_decade) %>% 
+  arrange(desc(mean_active_days)) %>% 
+  gt()
+```
+
